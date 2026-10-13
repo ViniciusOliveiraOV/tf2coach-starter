@@ -1,0 +1,37 @@
+# Credenciais e variáveis de ambiente
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+.terraform/
+.terraform.lock.hcl
+
+# Arquivos pessoais do TF2; não comitar dados do jogo
+*.dem
+*.mp4
+*.mkv
+*.avi
+*.webm
+*.log
+
+# Saídas geradas, exceto marcador
+data/*
+!data/.keep/
+!data/.gitkeep
+reports/
+output/
+cache/
+
+# Python, IDE e Linux
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.idea/
+.vscode/
+.DS_Store

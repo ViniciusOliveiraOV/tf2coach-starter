@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Launcher mínimo de TF2 para validação do sistema nativo de demos.
+# Não faz upload, não apaga arquivos e não inicia agentes.
+set -euo pipefail
+
+usage() {
+  cat <<'HELP'
+Uso: ./scripts/tf2coach [--dry-run | --help]
+  --dry-run  Exibe o comando sem iniciar Steam/TF2.
+  --help     Mostra esta ajuda.
+
+A pasta de demos (`ds_dir tf2coach`) fica SOB o gamedir do TF2,
+não no diretório deste repositório.
+HELP
+}
+
+if [[ $# -gt 1 ]]; then usage >&2; exit 2; fi
+case "${1:-}" in
+  --help|-h) usage; exit 0 ;;
+  ''|--dry-run) ;;
+  *) usage >&2; exit 2 ;;
+esac
+
+# ds_screens 0 impede screenshots automáticos do recurso de demos.
+# ds_autodelete 0 preserva arquivos até política de retenção explícita.
+command=(
+  steam -applaunch 440
+  -novid -console
+  +ds_dir tf2coach
+  +ds_log 1
+  +ds_screens 0
+  +ds_autodelete 0
+  +ds_enable 2
+)
+
+if [[ "${1:-}" == "--dry-run" ]]; then
+  printf 'Comando previsto: '
+  printf '%q ' "${command[@]}"
+  printf '\n'
+  exit 0
+fi
+
+if ! command -v steam >/dev/null 2>&1; then
+  printf 'ERRO: executável steam não encontrado no PATH.\n' >&2
+  exit 127
+fi
+
+exec "${command[@]}"
