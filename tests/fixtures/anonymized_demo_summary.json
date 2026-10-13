@@ -1,0 +1,36 @@
+{
+  "header": {
+    "demo_type": "HL2DEMO",
+    "version": 4,
+    "protocol": 4,
+    "server": "REDACTED",
+    "nick": "POV_A",
+    "map": "ctf_test",
+    "game": "tf",
+    "duration": 120.0,
+    "ticks": 8000,
+    "frames": 8000,
+    "signon": 0
+  },
+  "chat": [
+    {"kind": "say", "from": "THIRD_PARTY", "text": "PRIVATE_CHAT_MUST_NOT_APPEAR", "tick": 115}
+  ],
+  "users": {
+    "10": {"name": "POV_A", "userId": 10, "steamId": "ANON_STEAM_A", "team": "Red", "classes": {"3": 5}},
+    "20": {"name": "THIRD_PARTY", "userId": 20, "steamId": "ANON_STEAM_B", "team": "Blue", "classes": {"1": 5}},
+    "30": {"name": "THIRD_PARTY_C", "userId": 30, "steamId": "ANON_STEAM_C", "team": "Blue", "classes": {"2": 5}}
+  },
+  "deaths": [
+    {"weapon": "rocketlauncher", "victim": 20, "assister": 30, "killer": 10, "tick": 110},
+    {"weapon": "scattergun", "victim": 10, "assister": null, "killer": 20, "tick": 130},
+    {"weapon": "rocketlauncher", "victim": 30, "assister": 10, "killer": 20, "tick": 150},
+    {"weapon": "world", "victim": 30, "assister": 20, "killer": 10, "tick": 170},
+    {"weapon": "world", "victim": 10, "assister": null, "killer": 10, "tick": 180}
+  ],
+  "rounds": [
+    {"winner": "red", "length": 60.0, "end_tick": 4100}
+  ],
+  "startTick": 100,
+  "intervalPerTick": 0.015,
+  "pauses": []
+}

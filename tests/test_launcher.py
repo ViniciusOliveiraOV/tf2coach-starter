@@ -13,6 +13,8 @@ class TestLauncher(unittest.TestCase):
         self.assertIn('+ds_dir tf2coach', result.stdout)
         self.assertIn('+ds_screens 0', result.stdout)
         self.assertIn('+ds_autodelete 0', result.stdout)
+        self.assertIn('demo_sync.py', result.stdout)
+        self.assertIn('data/demos', result.stdout)
 
     def test_help(self):
         result = subprocess.run([str(LAUNCHER), '--help'], capture_output=True, text=True, check=True)

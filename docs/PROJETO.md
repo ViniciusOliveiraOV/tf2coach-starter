@@ -34,7 +34,7 @@ Steam/TF2 --(ds_enable 2)--> arquivo .dem no gamedir
                          JSON + relatório básico
 ```
 
-Nesta versão starter, apenas **launcher e inventário** estão implementados. Parsing de conteúdo real é TICKET-001. Nenhuma demo foi processada nesta entrega.
+Nesta versão starter, **launcher, inventário, parsing de demo real e relatório individual determinístico local** estão implementados. TICKET-001 validou `tf-demo-parser` e documentou o JSON observado; TICKET-002 calcula contagens individuais somente dos registros verificáveis e grava Markdown privado em `data/reports/`. Não há IA generativa, análise espacial ou conclusão tática automatizada nesta etapa.
 
 ### 3.2 Arquitetura-alvo incremental (não implementada)
 

@@ -9,14 +9,15 @@ O usuário é único e o projeto é pessoal, mas a conexão com Steam, arquivos 
 - Nunca salvar IDs pessoais/nicks/voz/chat sem necessidade explícita. Dados de outros jogadores podem aparecer em demos; não compartilhar ou publicar material bruto.
 - Não registrar tokens, chaves, URLs assinadas ou arquivos privados em logs. Arquivos `.env` e relatórios locais não devem entrar no Git.
 
-## Política de armazenamento (a implementar, NÃO ativa)
+## Política de armazenamento (sincronização local ativa; upload futuro não implementado)
 
-- Meta de buffer: 2 GiB; aplicar proteção real **antes** de upload/gravação extensa, sem pressupor que heurística evita exceder o teto.
-- Watcher reconhece arquivos fechados de forma robusta; `mtime` isolado é insuficiente.
-- Upload com autenticação e destino privado; verificar checksum, tamanho e confirmação remota.
-- Se falhar upload, preservar original e notificar. Se não houver espaço, interromper novas capturas de forma segura, não apagar o único exemplar.
+- O launcher observa as pastas `tf/tf2coach` das bibliotecas Steam detectadas em `libraryfolders.vdf` e copia demos concluídas para `data/demos/` no repositório.
+- No Linux, o sincronizador verifica descritores abertos visíveis em `/proc` para o usuário que iniciou TF2, revalida metadados e SHA-256, e só então publica atomicamente. Não usa intervalo sem mudanças como prova de fechamento. Steam/TF2 devem rodar sob o mesmo usuário que o launcher.
+- As cópias locais têm limite rígido de 2 GiB. Atingido o teto, o sincronizador pausa novas cópias e avisa; não apaga arquivo algum. O teto não impede o jogo de gravar uma demo maior na pasta original.
+- O original permanece intacto; nomes já existentes não são sobrescritos, cópias repetidas são ignoradas e falhas de integridade não são publicadas.
+- O caminho de upload futuro deverá manter verificação remota, retries e preservação dos originais; nenhum upload está implementado ou autorizado neste ticket.
+- Uma partida pode ultrapassar 2 GiB; validar a impossibilidade de proteger o espaço usado pelo jogo sem alterar o mecanismo nativo de gravação.
 - Aplicar retenção explícita **separada** para demo bruta e relatórios; exclusão local só após testes de recuperação e autorização.
-- Uma partida pode ultrapassar 2 GiB; testar e comunicar impossibilidade de garantia rígida no sistema de gravação nativo.
 
 ## Cloud / Terraform (ainda não autorizado)
 

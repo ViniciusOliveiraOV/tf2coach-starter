@@ -1,16 +1,18 @@
 #!/usr/bin/env bash
-# Launcher mínimo de TF2 para validação do sistema nativo de demos.
-# Não faz upload, não apaga arquivos e não inicia agentes.
+# Inicia TF2 e mantém ativa a cópia local de demos concluídas.
 set -euo pipefail
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd -- "$SCRIPT_DIR/.." && pwd)"
 
 usage() {
   cat <<'HELP'
 Uso: ./scripts/tf2coach [--dry-run | --help]
-  --dry-run  Exibe o comando sem iniciar Steam/TF2.
+  --dry-run  Exibe o comando sem iniciar Steam/TF2 ou sincronizador.
   --help     Mostra esta ajuda.
 
-A pasta de demos (`ds_dir tf2coach`) fica SOB o gamedir do TF2,
-não no diretório deste repositório.
+O launcher mantém o sincronizador ativo no terminal. Ctrl+C encerra apenas o
+sincronizador; demos originais não são alteradas nem removidas.
 HELP
 }
 
@@ -21,8 +23,6 @@ case "${1:-}" in
   *) usage >&2; exit 2 ;;
 esac
 
-# ds_screens 0 impede screenshots automáticos do recurso de demos.
-# ds_autodelete 0 preserva arquivos até política de retenção explícita.
 command=(
   steam -applaunch 440
   -novid -console
@@ -34,15 +34,29 @@ command=(
 )
 
 if [[ "${1:-}" == "--dry-run" ]]; then
-  printf 'Comando previsto: '
+  printf 'Comando do jogo: setsid '
   printf '%q ' "${command[@]}"
-  printf '\n'
+  printf '\nSincronizador: python3 %q --repo-root %q\n' "$SCRIPT_DIR/demo_sync.py" "$REPO_ROOT"
+  printf 'Destino local: %s/data/demos (limite: 2 GiB)\n' "$REPO_ROOT"
   exit 0
 fi
 
-if ! command -v steam >/dev/null 2>&1; then
-  printf 'ERRO: executável steam não encontrado no PATH.\n' >&2
-  exit 127
-fi
+for tool in steam python3 setsid; do
+  if ! command -v "$tool" >/dev/null 2>&1; then
+    printf 'ERRO: executável %s não encontrado no PATH.\n' "$tool" >&2
+    exit 127
+  fi
+done
 
-exec "${command[@]}"
+python3 "$SCRIPT_DIR/demo_sync.py" --repo-root "$REPO_ROOT" &
+sync_pid=$!
+cleanup() {
+  trap - INT TERM EXIT
+  kill -INT "$sync_pid" 2>/dev/null || true
+  wait "$sync_pid" 2>/dev/null || true
+}
+trap cleanup INT TERM EXIT
+
+setsid "${command[@]}"
+printf 'TF2 solicitado à Steam; sincronizador ativo. Ctrl+C encerra a cópia local.\n'
+wait "$sync_pid"

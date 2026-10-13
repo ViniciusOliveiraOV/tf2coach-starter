@@ -1,37 +1,77 @@
-# Credenciais e variáveis de ambiente
-.env
-.env.*
-!.env.example
-*.pem
-*.key
-*.tfstate
-*.tfstate.*
-*.tfvars
-*.tfvars.json
-.terraform/
-.terraform.lock.hcl
-
-# Arquivos pessoais do TF2; não comitar dados do jogo
+# Dados privados e saídas locais de partidas
+/data/*
+!/data/.keep/
+!/data/.keep/.gitkeep
+/reports/
+/output/
+/cache/
 *.dem
+*.dem.*
 *.mp4
 *.mkv
 *.avi
 *.webm
+*.mov
+*.m4v
+*.m4s
+*.flv
+
+# Credenciais e configuração pessoal
+.env
+.env.*
+!.env.example
+.envrc
+.direnv/
+.secrets/
+secrets/
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.kubeconfig
+
+# Dependências, builds e resultados de testes
+/node_modules/
+/dist/
+/coverage/
+/playwright-report/
+/test-results/
+*.tsbuildinfo
 *.log
-
-# Saídas geradas, exceto marcador
-data/*
-!data/.keep/
-!data/.gitkeep
-reports/
-output/
-cache/
-
-# Python, IDE e Linux
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
 .venv/
+venv/
+.tox/
+/target/
+
+# Estado local de ferramentas
+/.tokensave/
+/.codex/
+/.hermes/
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+.terraform.lock.hcl
+crash.log
+
+# Editor e sistema operacional
 .idea/
 .vscode/
+*.swp
+*.swo
 .DS_Store
+Thumbs.db
+desktop.ini
